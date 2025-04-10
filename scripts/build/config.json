@@ -1,0 +1,28 @@
+{
+  "staking": {
+    "validatorThreshold": "1.0",
+    "poolCreatorThreshold": "2.0",
+    "evaluatorThreshold": "0.5"
+  },
+  "bonding": {
+    "evaluationDuration": 86400,
+    "optionVotingDuration": 86400,
+    "disputeDuration": 43200,
+    "autoUnfreezeDelay": 21600,
+    "falseEvalPenalty": "0.1",
+    "trueEvalReward": "0.05",
+    "trueDisputeReward": "0.1",
+    "falseDisputePenalty": "0.15",
+    "goodPoolReward": "0.2",
+    "badPoolPenalty": "0.3",
+    "minVotesRequired": 2,
+    "poolCreationFee": "0.0",
+    "initialPerOptionCap": 5,
+    "maxVoteDifference": 5
+  },
+  "predictionMarket": {
+    "defaultLiquidity": "150.0",
+    "defaultLiquidityEnabled": true,
+    "initialFund": "1000000.0"
+  }
+}

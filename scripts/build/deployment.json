@@ -1,0 +1,10 @@
+{
+  "network": "hardhat",
+  "timestamp": "2025-04-09T16:53:05.758Z",
+  "contracts": {
+    "MockERC20": "0x694A64683F4d6a66d998f6632E615552Fb7579D4",
+    "HiloStaking": "0x0F3F5E61589A8d03fdA410003a78Dbc7FbC98B0c",
+    "HiloBonding": "0xE6E892276d312597e99813B6EeF35ae106b24Af7",
+    "HiloPredictionMarket": "0x1E739Eb86Dd32b208BB1b604578a2Ff747884193"
+  }
+}

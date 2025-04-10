@@ -1,0 +1,4 @@
+betId,bettor,betSide,betAmount,liquidityYes,liquidityNo,reservedYes,reservedNo,totalRemainingLiquidity,oddsYes,oddsNo,lockedOdds,potentialReturn,yieldPct,cashoutDetails,totalVolYes,totalVolNo
+"N/A","Initia...","N/A","0.0000","33.9295","41.4463","3.5705","0.0000","78.9463","2.3267","1.9047","N/A","N/A","N/A","N/A","10.0000","15.0000"
+"3","0x976E...","Yes","10.0000","41.0705","34.2399","0.0000","3.2601","78.5705","1.9130","2.2947","1.6845","6.8460","68.46%","N/A","20.0000","15.0000"
+"4","0x14dC...","No","10.0000","34.5008","40.7599","2.9992","0.0000","78.2599","2.2683","1.9200","1.6240","6.2412","62.41%","N/A","20.0000","25.0000"

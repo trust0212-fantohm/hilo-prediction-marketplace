@@ -1,0 +1,1434 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stakingContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[14]",
+        "name": "_configValues",
+        "type": "uint256[14]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnableInvalidOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "OwnableUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "AuthorizedAddressUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "validatorCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "BulkStakesUnfrozen",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "ConfigUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "penaltyAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "CreatorPenalized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "evaluator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isEvaluationDispute",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "voteValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "currentVoteCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "DisputeVoteCast",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      }
+    ],
+    "name": "EvaluationPhaseCompleted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "evaluator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "approveVotes",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rejectVotes",
+        "type": "uint256"
+      }
+    ],
+    "name": "EvaluationVoteCast",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "OptionGroupCanceled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "evaluator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "optionIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "currentVoteCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "OptionVoteCast",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startTimeframe",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "string",
+        "name": "_data",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "evaluationStart",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "evaluationEnd",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "optionVotingEnd",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "disputeEnd",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "optionsCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolOptionsSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "finalApproval",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "winningOptionIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolProcessed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "evaluator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "op",
+        "type": "uint8"
+      }
+    ],
+    "name": "RewardClaimedForPool",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "validator",
+        "type": "address"
+      }
+    ],
+    "name": "StakeFrozen",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "validator",
+        "type": "address"
+      }
+    ],
+    "name": "StakeUnfrozen",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "optionIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isDispute",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newCap",
+        "type": "uint256"
+      }
+    ],
+    "name": "VoteCapIncreased",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "GetEvaluationResultForPoolId",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "processed",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "finalApproval",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winningOptionIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "evaluationVotes",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "disputeVotes",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_validator",
+        "type": "address"
+      }
+    ],
+    "name": "GetValidationResultForPoolId",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "processed",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "finalApproval",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winningOptionIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "validatorVoted",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "validatorOption",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "rewardClaimedResult",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "estimatedReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int8",
+        "name": "rewardType",
+        "type": "int8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "authorizedAddresses",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimRewardForPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "completeEvaluationPhase",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "config",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "evaluationDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "optionVotingDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "disputeDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "autoUnfreezeDelay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "poolCreationFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "falseEvalPenalty",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "trueEvalReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "trueDisputeReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "falseDisputePenalty",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "goodPoolReward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "badPoolPenalty",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minVotesRequired",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "initialPerOptionCap",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxVoteDifference",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_title",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startTimeframe",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_settleTimeframe",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_data",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_who",
+        "type": "address"
+      }
+    ],
+    "name": "createPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_validator",
+        "type": "address"
+      }
+    ],
+    "name": "forceUnfreezeValidator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAutoUnfreezeStatus",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isProcessed",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "unfreezeEligible",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timeRemaining",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getFrozenValidators",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolBasics",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startTimeframe",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "evaluationEnd",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "disputeEnd",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolEvaluationStatus",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "evaluationComplete",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "evaluationApproved",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "approveVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rejectVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "approveDisputeVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rejectDisputeVotes",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolOptions",
+    "outputs": [
+      {
+        "internalType": "string[]",
+        "name": "optionNames",
+        "type": "string[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "hasOptions",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolStatus",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "processed",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "processedTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "finalApproval",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "disputeRound",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winningOptionIndex",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolTimelines",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "evaluationStart",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "evaluationEnd",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "optionVotingStart",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "optionVotingEnd",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "disputeEnd",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolVotes",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "approveVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rejectVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "optionVoteCounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "disputeOptionVoteCounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxPerOptionCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxDisputePerOptionCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "start",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "count",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPools",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "creator",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "data",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "poolId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTimeframe",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "evaluationStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "evaluationEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "optionVotingStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "optionVotingEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "disputeEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "processedTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct HiloBonding.PoolBase[]",
+        "name": "pools",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserVotes",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "evaluationVote",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "disputeEvalVote",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "optionVote",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "disputeOptionVote",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getValidatorCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "isPoolCanceled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "isPoolSettled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_validator",
+        "type": "address"
+      }
+    ],
+    "name": "isValidatorFrozen",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "poolIds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
+    ],
+    "name": "processPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "rewardClaimed",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_optionNames",
+        "type": "string[]"
+      }
+    ],
+    "name": "setPoolOptions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stakingContract",
+    "outputs": [
+      {
+        "internalType": "contract IHiloStaking",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_addr",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "updateAuthorizedAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[14]",
+        "name": "_newConfig",
+        "type": "uint256[14]"
+      }
+    ],
+    "name": "updateConfig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isEvaluationDispute",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_voteValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "voteDispute",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "_approve",
+        "type": "bool"
+      }
+    ],
+    "name": "voteEvaluation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_optionIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "voteOption",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
